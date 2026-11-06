@@ -1,129 +1,371 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#176b50">
-<meta name="description" content="SmartQ Clinic queue and appointment prototype">
-<link rel="manifest" href="manifest.webmanifest">
-<title>SmartQ Clinic</title>
-<style>
-:root{--green:#176b50;--green2:#e9f5ef;--ink:#17352b;--muted:#65766f;--line:#dce8e1;--bg:#f5f8f6;--white:#fff;--red:#b33d3d;--amber:#91600b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{background:var(--green);color:white;padding:20px 18px 18px}header h1{font-size:23px;margin:0}header p{margin:5px 0 0;color:#d9eee4;font-size:13px}
-main{max-width:720px;margin:auto;padding:16px 14px 36px}.tabs{display:flex;background:#e7eee9;padding:4px;border-radius:13px;gap:4px;margin-bottom:15px}
-.tabs button{flex:1;border:0;background:transparent;padding:11px 6px;border-radius:10px;color:var(--ink);font-weight:650}
-.tabs button.active{background:white;box-shadow:0 1px 4px #183b2a18;color:var(--green)}
-.card{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px #183b2a08}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}
-.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}
-input,select{width:100%;border:1px solid #cbdad1;border-radius:10px;padding:12px;font:inherit;background:white;color:var(--ink)}
-button.primary,.primary{background:var(--green);color:white;border:0;border-radius:11px;padding:12px 15px;font:inherit;font-weight:700;cursor:pointer}
-button.secondary{background:var(--green2);color:var(--green);border:1px solid #cce3d6;border-radius:10px;padding:10px 12px;font:inherit;font-weight:650;cursor:pointer}
-button.danger{background:#fff1f1;color:var(--red);border:1px solid #f0cccc;border-radius:10px;padding:9px 11px;font:inherit}
-button:disabled{opacity:.45;cursor:not-allowed}
-.full{width:100%;margin-top:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#f4f8f5;border-radius:12px;padding:12px}.stat strong{display:block;font-size:23px;color:var(--green)}.stat span{font-size:11px;color:var(--muted)}
-.token{background:var(--green2);border:1px solid #cde5d7;border-radius:14px;text-align:center;padding:18px;margin-top:12px}
-.token strong{font-size:40px;display:block;color:var(--green);letter-spacing:1px}
-.notice{padding:11px 12px;background:#fff8e8;border:1px solid #f0dfb4;color:#76520e;border-radius:10px;font-size:12px;line-height:1.45}
-.patient{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
-.patient:last-child{border-bottom:0}.patient small{display:block;color:var(--muted);margin-top:3px}
-.pill{font-size:11px;padding:4px 8px;border-radius:99px;background:#edf3ef;color:#52675d;white-space:nowrap}
-.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:18px}
-.hidden{display:none!important}
-@media(max-width:420px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:20px}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#176b50">
+  <meta name="description" content="SmartQ Clinic shared queue and appointment demo">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>SmartQ Clinic</title>
+  <style>
+    :root{--green:#176b50;--green2:#e9f5ef;--ink:#17352b;--muted:#65766f;--line:#dce8e1;--bg:#f5f8f6;--white:#fff;--red:#b33d3d;--amber:#91600b}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    header{background:var(--green);color:#fff;padding:20px 18px 18px}header h1{font-size:23px;margin:0}header p{margin:5px 0 0;color:#d9eee4;font-size:13px}
+    main{max-width:760px;margin:auto;padding:16px 14px 36px}.tabs{display:flex;background:#e7eee9;padding:4px;border-radius:13px;gap:4px;margin-bottom:15px}
+    .tabs button{flex:1;border:0;background:transparent;padding:11px 6px;border-radius:10px;color:var(--ink);font-weight:650;cursor:pointer}.tabs button.active{background:#fff;box-shadow:0 1px 4px #183b2a18;color:var(--green)}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px #183b2a08}
+    h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}input,select{width:100%;border:1px solid #cbdad1;border-radius:10px;padding:12px;font:inherit;background:#fff;color:var(--ink)}
+    button.primary{background:var(--green);color:#fff;border:0;border-radius:11px;padding:12px 15px;font:inherit;font-weight:700;cursor:pointer}button.secondary{background:var(--green2);color:var(--green);border:1px solid #cce3d6;border-radius:10px;padding:10px 12px;font:inherit;font-weight:650;cursor:pointer}button.danger{background:#fff1f1;color:var(--red);border:1px solid #f0cccc;border-radius:10px;padding:9px 11px;font:inherit;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
+    .full{width:100%;margin-top:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#f4f8f5;border-radius:12px;padding:12px}.stat strong{display:block;font-size:23px;color:var(--green)}.stat span{font-size:11px;color:var(--muted)}
+    .token{background:var(--green2);border:1px solid #cde5d7;border-radius:14px;text-align:center;padding:18px;margin-top:12px}.token strong{font-size:40px;display:block;color:var(--green);letter-spacing:1px}
+    .notice{padding:11px 12px;background:#fff8e8;border:1px solid #f0dfb4;color:#76520e;border-radius:10px;font-size:12px;line-height:1.45}.message{display:none;margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.4}.message.show{display:block}.message.error{background:#fff1f1;color:#922f2f;border:1px solid #f0cccc}.message.ok{background:#eaf6ee;color:#176b50;border:1px solid #cce3d6}
+    .patient{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.patient:last-child{border-bottom:0}.patient small{display:block;color:var(--muted);margin-top:3px}.pill{font-size:11px;padding:4px 8px;border-radius:99px;background:#edf3ef;color:#52675d;white-space:nowrap}.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+    .row-actions{display:flex;gap:8px;flex-wrap:wrap}.row-actions button{flex:1}.hidden{display:none!important}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;word-break:break-all;color:#52675d}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}.topline h2{margin:0}
+    footer{text-align:center;color:var(--muted);font-size:11px;padding:18px}@media(max-width:460px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat strong{font-size:20px}.row-actions{flex-direction:column}}
+  </style>
 </head>
 <body>
 <header><h1>SmartQ Clinic</h1><p>Your clinic, your token, your time.</p></header>
 <main>
-<div class="notice">Prototype only: bookings are stored on this device. This version does not yet sync between a patient's phone and clinic reception. Use test names only; do not enter real medical or sensitive information.</div>
-<div class="tabs" role="tablist">
-<button id="patientTab" class="active" onclick="showTab('patient')">Patient</button>
-<button id="staffTab" onclick="showTab('staff')">Clinic desk</button>
-</div>
-<section id="patientView">
-<div class="card">
-<h2>Join the clinic</h2>
-<p class="muted">Choose how you would like to visit.</p>
-<div class="grid">
-<button class="secondary" onclick="setBooking('live')" id="liveChoice">Join live queue</button>
-<button class="secondary" onclick="setBooking('appointment')" id="appointmentChoice">Book appointment</button>
-</div>
-<div id="bookingForm">
-<label for="patientName">Your name (test only)</label><input id="patientName" maxlength="40" placeholder="e.g. Test Patient">
-<label for="phone">Mobile number (optional in prototype)</label><input id="phone" inputmode="tel" maxlength="15" placeholder="e.g. 9876543210">
-<div id="appointmentFields" class="hidden">
-<label for="apptDate">Appointment date</label><input id="apptDate" type="date">
-<label for="apptTime">Available time slot</label>
-<select id="apptTime"><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option></select>
-</div>
-<button class="primary full" onclick="createBooking()">Get my token</button>
-</div>
-<div id="myToken" class="hidden"></div>
-</div>
-<div class="card">
-<h2>Live clinic status</h2><div class="stats">
-<div class="stat"><strong id="currentToken">—</strong><span>Now serving</span></div>
-<div class="stat"><strong id="waitingCount">0</strong><span>Waiting</span></div>
-<div class="stat"><strong id="estimate">—</strong><span>Est. minutes</span></div>
-</div><p class="muted" style="margin-bottom:0">Waiting estimates are approximate and can change depending on consultation length.</p>
-</div>
-</section>
-<section id="staffView" class="hidden">
-<div class="card">
-<h2>Clinic desk</h2>
-<p class="muted">Demo receptionist controls. No password is configured in this prototype.</p>
-<div class="stats">
-<div class="stat"><strong id="staffCurrent">—</strong><span>Now serving</span></div>
-<div class="stat"><strong id="staffWaiting">0</strong><span>Waiting</span></div>
-<div class="stat"><strong id="staffTotal">0</strong><span>Today's tokens</span></div>
-</div>
-<div class="grid" style="margin-top:14px">
-<button class="primary" onclick="callNext()">Call next</button>
-<button class="secondary" onclick="completeCurrent()">Complete current</button>
-</div>
-<div class="grid" style="margin-top:9px">
-<button class="secondary" onclick="skipCurrent()">Skip current</button>
-<button class="secondary" onclick="resetDemo()">Reset demo queue</button>
-</div>
-</div>
-<div class="card"><h2>Queue list</h2><div id="queueList"></div></div>
-<div class="card"><h2>Add walk-in patient</h2>
-<label for="walkName">Patient name (test only)</label><input id="walkName" maxlength="40" placeholder="e.g. Walk-in test">
-<button class="primary full" onclick="addWalkIn()">Add to live queue</button></div>
-</section>
-<footer>SmartQ Clinic • Early prototype • Not for real patient data</footer>
+  <div class="notice">Shared cloud demo: patient bookings and the clinic desk use the same Supabase database. Use fictional test details only. Do not enter real patient or medical information until authentication, privacy, anti-spam protection and clinic procedures have been professionally reviewed.</div>
+  <div class="tabs" role="tablist">
+    <button id="patientTab" class="active" type="button" onclick="showTab('patient')">Patient</button>
+    <button id="staffTab" type="button" onclick="showTab('staff')">Clinic desk</button>
+  </div>
+
+  <section id="patientView">
+    <div class="card">
+      <h2>Join the clinic</h2><p class="muted">Choose how you would like to visit.</p>
+      <div class="grid">
+        <button class="secondary" type="button" onclick="setBooking('live')" id="liveChoice">Join live queue</button>
+        <button class="secondary" type="button" onclick="setBooking('appointment')" id="appointmentChoice">Book appointment</button>
+      </div>
+      <div id="bookingForm">
+        <label for="patientName">Your name (test only)</label><input id="patientName" maxlength="60" autocomplete="name" placeholder="e.g. Test Patient">
+        <label for="phone">Mobile number (optional)</label><input id="phone" inputmode="tel" maxlength="20" placeholder="e.g. 9876543210">
+        <div id="appointmentFields" class="hidden">
+          <label for="apptDate">Appointment date</label><input id="apptDate" type="date">
+          <label for="apptTime">Available time slot</label>
+          <select id="apptTime"><option value="09:00">9:00 AM</option><option value="09:30">9:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="11:30">11:30 AM</option><option value="12:00">12:00 PM</option></select>
+        </div>
+        <button id="bookingButton" class="primary full" type="button" onclick="createBooking()">Get my token</button>
+        <div id="bookingMessage" class="message" role="status"></div>
+      </div>
+      <div id="myToken" class="hidden"></div>
+    </div>
+    <div class="card">
+      <h2>Live clinic status</h2>
+      <div class="stats">
+        <div class="stat"><strong id="currentToken">—</strong><span>Now serving</span></div>
+        <div class="stat"><strong id="waitingCount">0</strong><span>Waiting today</span></div>
+        <div class="stat"><strong id="estimate">—</strong><span>Est. minutes</span></div>
+      </div>
+      <p class="muted" style="margin-bottom:0">Status refreshes about every 10 seconds. Waiting-time estimates are approximate.</p>
+      <div id="statusMessage" class="message" role="status"></div>
+    </div>
+    <div class="card">
+      <h2>Track an existing token</h2>
+      <p class="muted">Enter the private ticket reference shown after booking.</p>
+      <label for="trackCode">Ticket reference</label><input id="trackCode" placeholder="Paste your ticket reference" autocomplete="off">
+      <button class="secondary full" type="button" onclick="trackTicket()">Check my token</button>
+      <div id="trackResult" class="message" role="status"></div>
+    </div>
+  </section>
+
+  <section id="staffView" class="hidden">
+    <div class="card" id="loginCard">
+      <h2>Receptionist login</h2><p class="muted">Sign in with the staff account created in Supabase Authentication.</p>
+      <label for="staffEmail">Email</label><input id="staffEmail" type="email" autocomplete="username" placeholder="Receptionist email">
+      <label for="staffPassword">Password</label><input id="staffPassword" type="password" autocomplete="current-password" placeholder="Your password">
+      <button id="loginButton" class="primary full" type="button" onclick="staffLogin()">Sign in</button>
+      <div id="loginMessage" class="message" role="status"></div>
+    </div>
+    <div id="staffDashboard" class="hidden">
+      <div class="card">
+        <div class="topline"><h2>Clinic desk</h2><button class="danger" type="button" onclick="staffLogout()">Sign out</button></div>
+        <p class="muted" id="staffIdentity">Signed in</p>
+        <div class="stats">
+          <div class="stat"><strong id="staffCurrent">—</strong><span>Now serving</span></div>
+          <div class="stat"><strong id="staffWaiting">0</strong><span>Waiting today</span></div>
+          <div class="stat"><strong id="staffTotal">0</strong><span>Today's tokens</span></div>
+        </div>
+        <div class="row-actions" style="margin-top:14px">
+          <button class="primary" type="button" onclick="callNext()">Call next</button>
+          <button class="secondary" type="button" onclick="completeCurrent()">Complete current</button>
+          <button class="secondary" type="button" onclick="skipCurrent()">Skip current</button>
+        </div>
+        <div id="staffMessage" class="message" role="status"></div>
+      </div>
+      <div class="card"><h2>Today's queue</h2><div id="queueList"><div class="empty">Loading queue…</div></div></div>
+      <div class="card"><h2>Upcoming appointments (next 7 days)</h2><div id="appointmentsList"><div class="empty">Loading appointments…</div></div></div>
+      <div class="card"><h2>Add walk-in patient</h2>
+        <label for="walkName">Patient name (test only)</label><input id="walkName" maxlength="60" placeholder="e.g. Walk-in test">
+        <label for="walkPhone">Mobile number (optional)</label><input id="walkPhone" maxlength="20" inputmode="tel" placeholder="e.g. 9876543210">
+        <button class="primary full" type="button" onclick="addWalkIn()">Add to live queue</button>
+      </div>
+    </div>
+  </section>
+  <footer>SmartQ Clinic • Shared cloud test version • Not for real patient data</footer>
 </main>
-<script>
-const KEY='smartq_demo_v1';
-let mode='live';
-let state=load();
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||{next:1,current:null,items:[]}}catch(e){return {next:1,current:null,items:[]}}}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
-function showTab(which){document.getElementById('patientView').classList.toggle('hidden',which!=='patient');document.getElementById('staffView').classList.toggle('hidden',which!=='staff');document.getElementById('patientTab').classList.toggle('active',which==='patient');document.getElementById('staffTab').classList.toggle('active',which==='staff');render()}
-function setBooking(which){mode=which;document.getElementById('appointmentFields').classList.toggle('hidden',which!=='appointment');document.getElementById('liveChoice').style.outline=which==='live'?'2px solid #176b50':'none';document.getElementById('appointmentChoice').style.outline=which==='appointment'?'2px solid #176b50':'none';document.getElementById('myToken').classList.add('hidden')}
-function nextNumber(){return String(state.next++).padStart(3,'0')}
-function createBooking(){const name=document.getElementById('patientName').value.trim();if(!name){alert('Please enter a test name.');return}
-const item={id:Date.now()+Math.random(),token:nextNumber(),name,kind:mode,status:'waiting',created:new Date().toISOString(),date:mode==='appointment'?document.getElementById('apptDate').value:'',time:mode==='appointment'?document.getElementById('apptTime').value:''};
-if(mode==='appointment'&&!item.date){alert('Please select an appointment date.');state.next--;return}
-state.items.push(item);save();const ahead=state.items.filter(x=>x.status==='waiting'&&Number(x.token)<Number(item.token)).length;
-document.getElementById('myToken').innerHTML=`<div class="token"><span class="muted">Your token number</span><strong>#${item.token}</strong><b>${mode==='live'?'Live queue':'Scheduled appointment'}</b><p>${mode==='live'?ahead+' patient(s) ahead':item.date+' at '+item.time}</p><p class="muted">Keep this screen available. Ask reception if you need help.</p></div>`;
-document.getElementById('myToken').classList.remove('hidden');document.getElementById('patientName').value='';}
-function addWalkIn(){const name=document.getElementById('walkName').value.trim();if(!name){alert('Enter a test name.');return}state.items.push({id:Date.now()+Math.random(),token:nextNumber(),name,kind:'walk-in',status:'waiting',created:new Date().toISOString()});document.getElementById('walkName').value='';save()}
-function activeWaiting(){return state.items.filter(x=>x.status==='waiting').sort((a,b)=>Number(a.token)-Number(b.token))}
-function callNext(){if(state.current){alert('Complete or skip the current patient first.');return}const n=activeWaiting()[0];if(!n){alert('No patients waiting.');return}n.status='serving';state.current=n.id;save()}
-function completeCurrent(){if(!state.current){alert('There is no patient currently being served.');return}const p=state.items.find(x=>x.id===state.current);if(p)p.status='completed';state.current=null;save()}
-function skipCurrent(){if(!state.current){alert('There is no current patient.');return}const p=state.items.find(x=>x.id===state.current);if(p)p.status='skipped';state.current=null;save()}
-function resetDemo(){if(!confirm('Clear all demo queue entries on this device?'))return;state={next:1,current:null,items:[]};save();document.getElementById('myToken').classList.add('hidden')}
-function render(){const current=state.items.find(x=>x.id===state.current);const waiting=activeWaiting();const currentNum=current?'#'+current.token:'—';document.getElementById('currentToken').textContent=currentNum;document.getElementById('staffCurrent').textContent=currentNum;document.getElementById('waitingCount').textContent=waiting.length;document.getElementById('staffWaiting').textContent=waiting.length;document.getElementById('staffTotal').textContent=state.items.length;document.getElementById('estimate').textContent=waiting.length?('~'+waiting.length*10):'—';
-const list=document.getElementById('queueList');if(!state.items.length){list.innerHTML='<div class="empty">No patients in the demo queue yet.</div>';return}
-const order=[...state.items].sort((a,b)=>Number(a.token)-Number(b.token));list.innerHTML=order.map(p=>{const status=p.status==='serving'?'Now serving':p.status[0].toUpperCase()+p.status.slice(1);return `<div class="patient"><div><b>#${p.token} · ${escapeHtml(p.name)}</b><small>${p.kind==='appointment'?'Appointment '+p.date+' '+p.time:p.kind==='walk-in'?'Walk-in':'Live queue'}</small></div><span class="pill">${status}</span></div>`}).join('')}
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-const today=new Date();document.getElementById('apptDate').min=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);render();setBooking('live');
-if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  // The publishable key is designed for browser use. Database access is controlled by RLS and RPC permissions.
+  const SUPABASE_URL = 'https://slpnvgtkrxtcgqjwudsy.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_6B3JAsFY24UUjVFSFEly3Q_OuSmOI0k';
+  const CLINIC_SLUG = 'smartq-demo-clinic';
+  const db = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  let bookingMode = 'live';
+  let clinicId = null;
+  let staffUser = null;
+  let staffTimer = null;
+  let publicTimer = null;
+  const $ = id => document.getElementById(id);
+
+  function localDateString(date = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+    const values = Object.fromEntries(parts.map(p => [p.type,p.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+  function showMessage(id, text, kind='ok') {
+    const el = $(id); el.textContent = text; el.className = `message show ${kind}`;
+  }
+  function clearMessage(id) { const el = $(id); el.textContent = ''; el.className = 'message'; }
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  }
+  function rows(data) { return Array.isArray(data) ? data : (data ? [data] : []); }
+
+  window.showTab = function(which) {
+    $('patientView').classList.toggle('hidden', which !== 'patient');
+    $('staffView').classList.toggle('hidden', which !== 'staff');
+    $('patientTab').classList.toggle('active', which === 'patient');
+    $('staffTab').classList.toggle('active', which === 'staff');
+    if (which === 'staff' && staffUser) loadStaffData();
+  };
+
+  window.setBooking = function(which) {
+    bookingMode = which;
+    $('appointmentFields').classList.toggle('hidden', which !== 'appointment');
+    $('liveChoice').style.outline = which === 'live' ? '2px solid #176b50' : 'none';
+    $('appointmentChoice').style.outline = which === 'appointment' ? '2px solid #176b50' : 'none';
+    clearMessage('bookingMessage');
+  };
+
+  window.createBooking = async function() {
+    const name = $('patientName').value.trim();
+    const phone = $('phone').value.trim();
+    if (name.length < 2) { showMessage('bookingMessage','Please enter a name with at least 2 characters.','error'); return; }
+    const button = $('bookingButton'); button.disabled = true; button.textContent = 'Booking…';
+    clearMessage('bookingMessage');
+    try {
+      const args = {
+        p_patient_name: name,
+        p_patient_phone: phone || null,
+        p_visit_type: bookingMode,
+        p_appointment_date: bookingMode === 'appointment' ? $('apptDate').value : null,
+        p_appointment_time: bookingMode === 'appointment' ? $('apptTime').value : null
+      };
+      if (bookingMode === 'appointment' && !args.p_appointment_date) throw new Error('Please select an appointment date.');
+      const {data,error} = await db.rpc('smartq_book_visit', args);
+      if (error) throw error;
+      const ticket = rows(data)[0];
+      if (!ticket) throw new Error('The booking did not return a token. Please try again.');
+      localStorage.setItem('smartq_ticket_reference', ticket.tracking_code);
+      $('trackCode').value = ticket.tracking_code;
+      $('myToken').innerHTML = `
+        <div class="token"><span class="muted">Your token number</span><strong>#${String(ticket.token_number).padStart(3,'0')}</strong>
+        <b>${bookingMode === 'live' ? 'Live queue' : 'Scheduled appointment'}</b>
+        <p>${bookingMode === 'appointment' ? `Appointment: ${escapeHtml(ticket.appointment_date)} at ${escapeHtml(String(ticket.appointment_time).slice(0,5))}` : 'Your place is reserved in today’s queue.'}</p>
+        <p class="muted">Keep this ticket reference private. You can use it to check your token.</p>
+        <div class="code" id="newTicketCode">${escapeHtml(ticket.tracking_code)}</div>
+        <button class="secondary" type="button" onclick="copyTicketReference()">Copy ticket reference</button></div>`;
+      $('myToken').classList.remove('hidden');
+      $('patientName').value = ''; $('phone').value = '';
+      showMessage('bookingMessage','Your booking is saved in the shared clinic database.','ok');
+      await refreshPublicStatus();
+    } catch (error) {
+      showMessage('bookingMessage', error.message || 'Booking failed. Please try again.','error');
+    } finally { button.disabled = false; button.textContent = 'Get my token'; }
+  };
+
+  window.copyTicketReference = async function() {
+    const code = $('newTicketCode')?.textContent || $('trackCode').value;
+    try { await navigator.clipboard.writeText(code); showMessage('bookingMessage','Ticket reference copied. Keep it private.','ok'); }
+    catch { showMessage('bookingMessage','Please select and copy the ticket reference manually.','error'); }
+  };
+
+  window.trackTicket = async function() {
+    const code = $('trackCode').value.trim();
+    if (!code) { showMessage('trackResult','Enter your ticket reference first.','error'); return; }
+    const {data,error} = await db.rpc('smartq_track_ticket',{p_tracking_code:code});
+    if (error) { showMessage('trackResult',error.message,'error'); return; }
+    const ticket = rows(data)[0];
+    if (!ticket) { showMessage('trackResult','No ticket was found for that reference. Check it and try again.','error'); return; }
+    const detail = ticket.appointment_date
+      ? `Appointment ${ticket.appointment_date} at ${String(ticket.appointment_time).slice(0,5)}. ` : '';
+    showMessage('trackResult',`Token #${String(ticket.token_number).padStart(3,'0')} · ${ticket.status.replace('_',' ')} · ${ticket.patients_ahead} patient(s) ahead · about ${ticket.estimated_wait_minutes} minute(s). ${detail}`,'ok');
+  };
+
+  async function refreshPublicStatus() {
+    const {data,error} = await db.rpc('smartq_public_status');
+    if (error) { showMessage('statusMessage','Unable to refresh queue status. Check your connection.','error'); return; }
+    const status = rows(data)[0] || {};
+    $('currentToken').textContent = status.now_serving ? `#${String(status.now_serving).padStart(3,'0')}` : '—';
+    $('waitingCount').textContent = status.waiting_count ?? 0;
+    $('estimate').textContent = status.waiting_count ? `~${status.estimated_wait_minutes}` : '—';
+    clearMessage('statusMessage');
+    const lastCode = localStorage.getItem('smartq_ticket_reference');
+    if (lastCode && !$('trackCode').value) $('trackCode').value = lastCode;
+  }
+
+  async function getClinicId() {
+    if (clinicId) return clinicId;
+    const {data,error} = await db.from('clinics').select('id,name').eq('slug',CLINIC_SLUG).eq('is_active',true).maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error('SmartQ Demo Clinic was not found in the database.');
+    clinicId = data.id;
+    return clinicId;
+  }
+
+  window.staffLogin = async function() {
+    const email = $('staffEmail').value.trim();
+    const password = $('staffPassword').value;
+    if (!email || !password) { showMessage('loginMessage','Enter your staff email and password.','error'); return; }
+    $('loginButton').disabled = true; $('loginButton').textContent = 'Signing in…';
+    try {
+      const {data,error} = await db.auth.signInWithPassword({email,password});
+      if (error) throw error;
+      await verifyStaffAccess(data.user);
+      $('staffPassword').value = '';
+      showMessage('staffMessage','Signed in successfully.','ok');
+    } catch (error) {
+      await db.auth.signOut();
+      showMessage('loginMessage',error.message || 'Sign-in failed.','error');
+    } finally { $('loginButton').disabled = false; $('loginButton').textContent = 'Sign in'; }
+  };
+
+  async function verifyStaffAccess(user) {
+    const id = await getClinicId();
+    const {data,error} = await db.from('clinic_members').select('clinic_id,role').eq('clinic_id',id).eq('user_id',user.id).maybeSingle();
+    if (error) throw error;
+    if (!data) throw new Error('This account is not listed as a member of SmartQ Demo Clinic.');
+    staffUser = user;
+    $('loginCard').classList.add('hidden'); $('staffDashboard').classList.remove('hidden');
+    $('staffIdentity').textContent = `${user.email} · ${data.role}`;
+    clearMessage('loginMessage');
+    await loadStaffData();
+    if (staffTimer) clearInterval(staffTimer);
+    staffTimer = setInterval(loadStaffData,10000);
+  }
+
+  window.staffLogout = async function() {
+    if (staffTimer) clearInterval(staffTimer);
+    staffTimer = null; staffUser = null;
+    await db.auth.signOut();
+    $('staffDashboard').classList.add('hidden'); $('loginCard').classList.remove('hidden');
+    showMessage('loginMessage','You have signed out.','ok');
+  };
+
+  async function loadStaffData() {
+    if (!staffUser) return;
+    try {
+      const id = await getClinicId();
+      const today = localDateString();
+      const {data,error} = await db.from('queue_entries')
+        .select('id,patient_name,patient_phone,token_number,source,status,queue_date,appointment_id')
+        .eq('clinic_id',id).eq('queue_date',today).order('token_number',{ascending:true});
+      if (error) throw error;
+      const entries = data || [];
+      const current = entries.find(item => item.status === 'serving');
+      const waiting = entries.filter(item => item.status === 'waiting');
+      $('staffCurrent').textContent = current ? `#${String(current.token_number).padStart(3,'0')}` : '—';
+      $('staffWaiting').textContent = waiting.length;
+      $('staffTotal').textContent = entries.length;
+      $('queueList').innerHTML = entries.length ? entries.map(item => {
+        const source = item.source === 'appointment' ? 'Appointment' : 'Live / walk-in';
+        return `<div class="patient"><div><b>#${String(item.token_number).padStart(3,'0')} · ${escapeHtml(item.patient_name)}</b><small>${source}${item.patient_phone ? ' · '+escapeHtml(item.patient_phone) : ''}</small></div><span class="pill">${escapeHtml(item.status.replace('_',' '))}</span></div>`;
+      }).join('') : '<div class="empty">No tokens for today yet.</div>';
+      await loadUpcomingAppointments(id,today);
+      clearMessage('staffMessage');
+    } catch (error) { showMessage('staffMessage',error.message || 'Could not load the queue.','error'); }
+  }
+
+  async function loadUpcomingAppointments(id,today) {
+    const lastDay = new Date(`${today}T12:00:00+05:30`);
+    lastDay.setDate(lastDay.getDate()+7);
+    const endDate = localDateString(lastDay);
+    const {data,error} = await db.from('appointments')
+      .select('id,patient_name,patient_phone,appointment_date,appointment_time,status')
+      .eq('clinic_id',id).gte('appointment_date',today).lte('appointment_date',endDate)
+      .in('status',['booked','checked_in']).order('appointment_date').order('appointment_time').limit(100);
+    if (error) throw error;
+    $('appointmentsList').innerHTML = data?.length ? data.map(appt =>
+      `<div class="patient"><div><b>${escapeHtml(appt.patient_name)}</b><small>${escapeHtml(appt.appointment_date)} at ${escapeHtml(String(appt.appointment_time).slice(0,5))}${appt.patient_phone ? ' · '+escapeHtml(appt.patient_phone) : ''}</small></div><span class="pill">${escapeHtml(appt.status.replace('_',' '))}</span></div>`
+    ).join('') : '<div class="empty">No upcoming appointments in the next 7 days.</div>';
+  }
+
+  window.callNext = async function() {
+    try {
+      const {data,error} = await db.rpc('smartq_staff_call_next');
+      if (error) throw error;
+      const item = rows(data)[0];
+      if (!item) { showMessage('staffMessage','No eligible patients are waiting. Appointments are called when their selected time arrives.','ok'); return; }
+      showMessage('staffMessage',`Now serving token #${String(item.token_number).padStart(3,'0')} · ${item.patient_name}`,'ok');
+      await loadStaffData(); await refreshPublicStatus();
+    } catch (error) { showMessage('staffMessage',error.message || 'Could not call the next patient.','error'); }
+  };
+
+  window.completeCurrent = async function() { await finishCurrent('completed'); };
+  window.skipCurrent = async function() { await finishCurrent('skipped'); };
+  async function finishCurrent(action) {
+    try {
+      const {data,error} = await db.rpc('smartq_staff_finish_current',{p_action:action});
+      if (error) throw error;
+      const item = rows(data)[0];
+      showMessage('staffMessage',item ? `Token #${String(item.token_number).padStart(3,'0')} marked ${item.status}.` : 'Queue updated.','ok');
+      await loadStaffData(); await refreshPublicStatus();
+    } catch (error) { showMessage('staffMessage',error.message || 'Could not update the current token.','error'); }
+  }
+
+  window.addWalkIn = async function() {
+    const name = $('walkName').value.trim();
+    const phone = $('walkPhone').value.trim();
+    if (name.length < 2) { showMessage('staffMessage','Enter a patient name with at least 2 characters.','error'); return; }
+    try {
+      const {data,error} = await db.rpc('smartq_staff_add_walkin',{p_patient_name:name,p_patient_phone:phone || null});
+      if (error) throw error;
+      const item = rows(data)[0];
+      $('walkName').value = ''; $('walkPhone').value = '';
+      showMessage('staffMessage',`Walk-in added with token #${String(item.token_number).padStart(3,'0')}.`,'ok');
+      await loadStaffData(); await refreshPublicStatus();
+    } catch (error) { showMessage('staffMessage',error.message || 'Could not add walk-in.','error'); }
+  };
+
+  async function startApp() {
+    $('apptDate').min = localDateString();
+    setBooking('live');
+    await refreshPublicStatus();
+    if (publicTimer) clearInterval(publicTimer);
+    publicTimer = setInterval(refreshPublicStatus,10000);
+    const {data:{session}} = await db.auth.getSession();
+    if (session?.user) {
+      try { await verifyStaffAccess(session.user); }
+      catch { await db.auth.signOut(); staffUser = null; }
+    }
+    const savedTicket = localStorage.getItem('smartq_ticket_reference');
+    if (savedTicket) $('trackCode').value = savedTicket;
+  }
+
+  startApp().catch(error => showMessage('statusMessage',error.message || 'App could not connect to the cloud database.','error'));
 </script>
-</body></html>
+<script>
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+  }
+</script>
+</body>
+</html>
