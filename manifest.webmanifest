@@ -1,0 +1,10 @@
+{
+  "name": "SmartQ Clinic",
+  "short_name": "SmartQ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f8f6",
+  "theme_color": "#176b50",
+  "description": "Clinic queue and appointment prototype",
+  "icons": []
+}
